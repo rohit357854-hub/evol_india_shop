@@ -1,0 +1,110 @@
+{
+  "summary": {
+    "total_tests": 11,
+    "passed_tests": 11,
+    "failed_tests": 0,
+    "success_rate": 100.0,
+    "timestamp": "2026-02-27T11:58:12.544331"
+  },
+  "detailed_results": [
+    {
+      "test": "Root API",
+      "method": "GET",
+      "endpoint": "",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Mobile Shop Inventory API\"}"
+    },
+    {
+      "test": "Create Status Check",
+      "method": "POST",
+      "endpoint": "status",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"2e712583-41e8-4271-a952-42eaf843bb53\",\"client_name\":\"test_client\",\"timestamp\":\"2026-02-27T11:"
+    },
+    {
+      "test": "Get Status Checks",
+      "method": "GET",
+      "endpoint": "status",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "[{\"id\":\"2e712583-41e8-4271-a952-42eaf843bb53\",\"client_name\":\"test_client\",\"timestamp\":\"2026-02-27T11"
+    },
+    {
+      "test": "Seed Database",
+      "method": "POST",
+      "endpoint": "seed",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Database already seeded\",\"count\":9}"
+    },
+    {
+      "test": "Get All Inventory",
+      "method": "GET",
+      "endpoint": "inventory",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "[{\"id\":\"2a0801a9-b6a4-467d-af29-49e5851f11b0\",\"product_name\":\"iPhone 15 Pro Max\",\"brand\":\"Apple\",\"pr"
+    },
+    {
+      "test": "Get Brands",
+      "method": "GET",
+      "endpoint": "brands",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "[\"Apple\",\"Google\",\"OnePlus\",\"Oppo\",\"Samsung\",\"Vivo\",\"Xiaomi\"]"
+    },
+    {
+      "test": "Create Inventory Item",
+      "method": "POST",
+      "endpoint": "inventory",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"113fca5b-6341-4bb3-845f-c7641c27fcfb\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+    },
+    {
+      "test": "Get Single Inventory Item",
+      "method": "GET",
+      "endpoint": "inventory/113fca5b-6341-4bb3-845f-c7641c27fcfb",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"113fca5b-6341-4bb3-845f-c7641c27fcfb\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+    },
+    {
+      "test": "Update Inventory Item",
+      "method": "PUT",
+      "endpoint": "inventory/113fca5b-6341-4bb3-845f-c7641c27fcfb",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"113fca5b-6341-4bb3-845f-c7641c27fcfb\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+    },
+    {
+      "test": "Get Non-existent Item",
+      "method": "GET",
+      "endpoint": "inventory/nonexistent-id",
+      "expected_status": 404,
+      "actual_status": 404,
+      "success": true,
+      "response_preview": "{\"detail\":\"Item not found\"}"
+    },
+    {
+      "test": "Delete Inventory Item",
+      "method": "DELETE",
+      "endpoint": "inventory/113fca5b-6341-4bb3-845f-c7641c27fcfb",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Item deleted successfully\"}"
+    }
+  ]
+}
