@@ -33,6 +33,7 @@ class InventoryItem(BaseModel):
     brand: str
     price: float
     condition: str  # "New" or "Pre-owned"
+    category: str = "Mobile"  # "Mobile" or "Accessories"
     main_image: str
     specifications: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -43,6 +44,7 @@ class InventoryItemCreate(BaseModel):
     brand: str
     price: float
     condition: str
+    category: str = "Mobile"
     main_image: str
     specifications: str
 
@@ -51,6 +53,7 @@ class InventoryItemUpdate(BaseModel):
     brand: Optional[str] = None
     price: Optional[float] = None
     condition: Optional[str] = None
+    category: Optional[str] = None
     main_image: Optional[str] = None
     specifications: Optional[str] = None
 
@@ -164,12 +167,14 @@ async def seed_database():
         return {"message": "Database already seeded", "count": count}
     
     sample_products = [
+        # Mobile Phones - New
         {
             "id": str(uuid.uuid4()),
             "product_name": "iPhone 15 Pro Max",
             "brand": "Apple",
             "price": 159900,
             "condition": "New",
+            "category": "Mobile",
             "main_image": "https://images.unsplash.com/photo-1695822877321-15ef5412b82e?w=800&q=80",
             "specifications": "• A17 Pro chip\n• 6.7-inch Super Retina XDR display\n• 48MP main camera\n• Titanium design\n• 256GB Storage\n• Action Button\n• USB-C with USB 3 speeds",
             "created_at": datetime.now(timezone.utc).isoformat(),
@@ -181,6 +186,7 @@ async def seed_database():
             "brand": "Samsung",
             "price": 134999,
             "condition": "New",
+            "category": "Mobile",
             "main_image": "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&q=80",
             "specifications": "• Snapdragon 8 Gen 3\n• 6.8-inch QHD+ Dynamic AMOLED\n• 200MP main camera\n• S Pen included\n• 256GB Storage\n• Galaxy AI features\n• Titanium frame",
             "created_at": datetime.now(timezone.utc).isoformat(),
@@ -192,6 +198,7 @@ async def seed_database():
             "brand": "Google",
             "price": 106999,
             "condition": "New",
+            "category": "Mobile",
             "main_image": "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&q=80",
             "specifications": "• Google Tensor G3\n• 6.7-inch LTPO OLED\n• 50MP main + 48MP ultrawide\n• 7 years of updates\n• 128GB Storage\n• Magic Eraser & Best Take\n• Temperature sensor",
             "created_at": datetime.now(timezone.utc).isoformat(),
@@ -203,6 +210,7 @@ async def seed_database():
             "brand": "OnePlus",
             "price": 64999,
             "condition": "New",
+            "category": "Mobile",
             "main_image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80",
             "specifications": "• Snapdragon 8 Gen 3\n• 6.82-inch LTPO AMOLED\n• Hasselblad camera system\n• 100W SUPERVOOC charging\n• 256GB Storage\n• OxygenOS 14\n• 5400mAh battery",
             "created_at": datetime.now(timezone.utc).isoformat(),
@@ -214,30 +222,9 @@ async def seed_database():
             "brand": "Xiaomi",
             "price": 99999,
             "condition": "New",
+            "category": "Mobile",
             "main_image": "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=800&q=80",
             "specifications": "• Snapdragon 8 Gen 3\n• 6.73-inch LTPO AMOLED\n• Leica quad camera\n• 90W wired + 80W wireless\n• 512GB Storage\n• HyperOS\n• Variable aperture",
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "updated_at": datetime.now(timezone.utc).isoformat()
-        },
-        {
-            "id": str(uuid.uuid4()),
-            "product_name": "iPhone 14 Pro",
-            "brand": "Apple",
-            "price": 89999,
-            "condition": "Pre-owned",
-            "main_image": "https://images.unsplash.com/photo-1663499482523-1c0c1bae4ce1?w=800&q=80",
-            "specifications": "• A16 Bionic chip\n• 6.1-inch Super Retina XDR\n• 48MP main camera\n• Dynamic Island\n• 128GB Storage\n• Excellent condition\n• 3 months warranty",
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "updated_at": datetime.now(timezone.utc).isoformat()
-        },
-        {
-            "id": str(uuid.uuid4()),
-            "product_name": "Samsung Galaxy S23",
-            "brand": "Samsung",
-            "price": 54999,
-            "condition": "Pre-owned",
-            "main_image": "https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?w=800&q=80",
-            "specifications": "• Snapdragon 8 Gen 2\n• 6.1-inch Dynamic AMOLED\n• 50MP main camera\n• 128GB Storage\n• Very good condition\n• Original box included\n• 2 months warranty",
             "created_at": datetime.now(timezone.utc).isoformat(),
             "updated_at": datetime.now(timezone.utc).isoformat()
         },
@@ -247,6 +234,7 @@ async def seed_database():
             "brand": "Oppo",
             "price": 84999,
             "condition": "New",
+            "category": "Mobile",
             "main_image": "https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=800&q=80",
             "specifications": "• Snapdragon 8 Gen 3\n• 6.82-inch LTPO AMOLED\n• Hasselblad dual periscope\n• 100W SUPERVOOC\n• 256GB Storage\n• ColorOS 14\n• 5000mAh battery",
             "created_at": datetime.now(timezone.utc).isoformat(),
@@ -258,8 +246,143 @@ async def seed_database():
             "brand": "Vivo",
             "price": 89999,
             "condition": "New",
+            "category": "Mobile",
             "main_image": "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=800&q=80",
             "specifications": "• Dimensity 9300\n• 6.78-inch LTPO AMOLED\n• ZEISS camera system\n• 100W FlashCharge\n• 256GB Storage\n• Funtouch OS 14\n• 5400mAh battery",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        # Mobile Phones - Pre-owned
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "iPhone 14 Pro",
+            "brand": "Apple",
+            "price": 89999,
+            "condition": "Pre-owned",
+            "category": "Mobile",
+            "main_image": "https://images.unsplash.com/photo-1663499482523-1c0c1bae4ce1?w=800&q=80",
+            "specifications": "• A16 Bionic chip\n• 6.1-inch Super Retina XDR\n• 48MP main camera\n• Dynamic Island\n• 128GB Storage\n• Excellent condition\n• 3 months warranty",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "Samsung Galaxy S23",
+            "brand": "Samsung",
+            "price": 54999,
+            "condition": "Pre-owned",
+            "category": "Mobile",
+            "main_image": "https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?w=800&q=80",
+            "specifications": "• Snapdragon 8 Gen 2\n• 6.1-inch Dynamic AMOLED\n• 50MP main camera\n• 128GB Storage\n• Very good condition\n• Original box included\n• 2 months warranty",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "iPhone 13",
+            "brand": "Apple",
+            "price": 49999,
+            "condition": "Pre-owned",
+            "category": "Mobile",
+            "main_image": "https://images.unsplash.com/photo-1632633173522-47456de71b76?w=800&q=80",
+            "specifications": "• A15 Bionic chip\n• 6.1-inch Super Retina XDR\n• Dual camera system\n• 128GB Storage\n• Good condition\n• Battery health 85%\n• 2 months warranty",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "OnePlus 11",
+            "brand": "OnePlus",
+            "price": 39999,
+            "condition": "Pre-owned",
+            "category": "Mobile",
+            "main_image": "https://images.unsplash.com/photo-1546054454-aa26e2b734c7?w=800&q=80",
+            "specifications": "• Snapdragon 8 Gen 2\n• 6.7-inch AMOLED\n• Hasselblad camera\n• 128GB Storage\n• Excellent condition\n• All accessories included\n• 3 months warranty",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        # Accessories
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "Apple AirPods Pro 2nd Gen",
+            "brand": "Apple",
+            "price": 24999,
+            "condition": "New",
+            "category": "Accessories",
+            "main_image": "https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=800&q=80",
+            "specifications": "• Active Noise Cancellation\n• Adaptive Transparency\n• Personalized Spatial Audio\n• MagSafe Charging Case\n• Up to 6 hours listening\n• Touch control\n• IPX4 sweat resistant",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "Samsung Galaxy Buds2 Pro",
+            "brand": "Samsung",
+            "price": 17999,
+            "condition": "New",
+            "category": "Accessories",
+            "main_image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&q=80",
+            "specifications": "• 24-bit Hi-Fi sound\n• Intelligent ANC\n• 360 Audio\n• IPX7 water resistant\n• 5 hours playback\n• Wireless charging\n• Voice detect",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "Apple 20W USB-C Charger",
+            "brand": "Apple",
+            "price": 1900,
+            "condition": "New",
+            "category": "Accessories",
+            "main_image": "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&q=80",
+            "specifications": "• 20W fast charging\n• USB-C connector\n• Works with iPhone 8+\n• Compact design\n• Original Apple product\n• 1 year warranty",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "Samsung 45W Super Fast Charger",
+            "brand": "Samsung",
+            "price": 2999,
+            "condition": "New",
+            "category": "Accessories",
+            "main_image": "https://images.unsplash.com/photo-1618478594486-c65b899c4936?w=800&q=80",
+            "specifications": "• 45W Super Fast Charging\n• USB-C to USB-C\n• PPS technology\n• Compact travel design\n• LED indicator\n• Original Samsung product",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "OnePlus Buds Pro 2",
+            "brand": "OnePlus",
+            "price": 11999,
+            "condition": "New",
+            "category": "Accessories",
+            "main_image": "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=800&q=80",
+            "specifications": "• Dual drivers\n• Adaptive noise cancellation\n• Spatial Audio\n• 39 hours total battery\n• IP55 rating\n• Google Fast Pair\n• Zen Mode Air",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "Anker PowerCore 10000mAh",
+            "brand": "Anker",
+            "price": 2499,
+            "condition": "New",
+            "category": "Accessories",
+            "main_image": "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800&q=80",
+            "specifications": "• 10000mAh capacity\n• 22.5W fast charging\n• USB-C & USB-A ports\n• Ultra compact\n• PowerIQ 3.0\n• Charges iPhone 2.5x",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        },
+        {
+            "id": str(uuid.uuid4()),
+            "product_name": "Apple AirPods 3rd Gen",
+            "brand": "Apple",
+            "price": 14999,
+            "condition": "Pre-owned",
+            "category": "Accessories",
+            "main_image": "https://images.unsplash.com/photo-1588423771073-b8903fbb85b5?w=800&q=80",
+            "specifications": "• Spatial Audio\n• Adaptive EQ\n• IPX4 sweat resistant\n• 6 hours listening\n• MagSafe compatible case\n• Like new condition\n• 1 month warranty",
             "created_at": datetime.now(timezone.utc).isoformat(),
             "updated_at": datetime.now(timezone.utc).isoformat()
         }
