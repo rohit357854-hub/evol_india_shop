@@ -4,7 +4,7 @@
     "passed_tests": 11,
     "failed_tests": 0,
     "success_rate": 100.0,
-    "timestamp": "2026-02-27T11:58:12.544331"
+    "timestamp": "2026-02-27T12:31:58.244212"
   },
   "detailed_results": [
     {
@@ -23,7 +23,7 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"2e712583-41e8-4271-a952-42eaf843bb53\",\"client_name\":\"test_client\",\"timestamp\":\"2026-02-27T11:"
+      "response_preview": "{\"id\":\"225b0a71-33db-4930-9e47-e13c8665d22f\",\"client_name\":\"test_client\",\"timestamp\":\"2026-02-27T12:"
     },
     {
       "test": "Get Status Checks",
@@ -41,7 +41,7 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"message\":\"Database already seeded\",\"count\":9}"
+      "response_preview": "{\"message\":\"Database already seeded\",\"count\":18}"
     },
     {
       "test": "Get All Inventory",
@@ -50,7 +50,7 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "[{\"id\":\"2a0801a9-b6a4-467d-af29-49e5851f11b0\",\"product_name\":\"iPhone 15 Pro Max\",\"brand\":\"Apple\",\"pr"
+      "response_preview": "[{\"id\":\"ac165826-ee02-4220-af13-f28c0206a49e\",\"product_name\":\"iPhone 15 Pro Max\",\"brand\":\"Apple\",\"pr"
     },
     {
       "test": "Get Brands",
@@ -59,7 +59,7 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "[\"Apple\",\"Google\",\"OnePlus\",\"Oppo\",\"Samsung\",\"Vivo\",\"Xiaomi\"]"
+      "response_preview": "[\"Anker\",\"Apple\",\"Google\",\"OnePlus\",\"Oppo\",\"Samsung\",\"Vivo\",\"Xiaomi\"]"
     },
     {
       "test": "Create Inventory Item",
@@ -68,25 +68,25 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"113fca5b-6341-4bb3-845f-c7641c27fcfb\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+      "response_preview": "{\"id\":\"85bdc311-5a0e-4c2f-9a62-884d519a3cf7\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
     },
     {
       "test": "Get Single Inventory Item",
       "method": "GET",
-      "endpoint": "inventory/113fca5b-6341-4bb3-845f-c7641c27fcfb",
+      "endpoint": "inventory/85bdc311-5a0e-4c2f-9a62-884d519a3cf7",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"113fca5b-6341-4bb3-845f-c7641c27fcfb\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+      "response_preview": "{\"id\":\"85bdc311-5a0e-4c2f-9a62-884d519a3cf7\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
     },
     {
       "test": "Update Inventory Item",
       "method": "PUT",
-      "endpoint": "inventory/113fca5b-6341-4bb3-845f-c7641c27fcfb",
+      "endpoint": "inventory/85bdc311-5a0e-4c2f-9a62-884d519a3cf7",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"113fca5b-6341-4bb3-845f-c7641c27fcfb\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+      "response_preview": "{\"id\":\"85bdc311-5a0e-4c2f-9a62-884d519a3cf7\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
     },
     {
       "test": "Get Non-existent Item",
@@ -100,7 +100,7 @@
     {
       "test": "Delete Inventory Item",
       "method": "DELETE",
-      "endpoint": "inventory/113fca5b-6341-4bb3-845f-c7641c27fcfb",
+      "endpoint": "inventory/85bdc311-5a0e-4c2f-9a62-884d519a3cf7",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
