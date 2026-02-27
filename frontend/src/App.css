@@ -1,34 +1,126 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
-}
-
-.App-header {
-    background-color: #0f0f10;
+/* App-level styles */
+.App {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+    background-color: #09090b;
 }
 
-.App-link {
-    color: #61dafb;
+/* Product card hover effects */
+.product-card {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px -12px rgba(96, 165, 250, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.product-image {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Filter chip styles */
+.filter-chip {
+    transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.filter-chip.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* WhatsApp button animation */
+.whatsapp-btn {
+    transition: all 0.3s ease;
+}
+
+.whatsapp-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 40px rgba(37, 211, 102, 0.5);
+}
+
+.whatsapp-btn:active {
+    transform: scale(0.98);
+}
+
+/* Search input focus */
+.search-input:focus {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+/* Admin table row hover */
+.admin-row {
+    transition: background-color 0.2s ease;
+}
+
+.admin-row:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Stagger animation delays */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }
+.stagger-7 { animation-delay: 0.7s; }
+.stagger-8 { animation-delay: 0.8s; }
+
+/* Modal backdrop blur */
+.modal-backdrop {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Price slider track */
+.price-slider {
+    height: 4px;
+    background: linear-gradient(to right, #27272a, #27272a);
+    border-radius: 2px;
+}
+
+/* Skeleton loading animation */
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
     }
-    to {
-        transform: rotate(360deg);
+    100% {
+        background-position: 200% 0;
     }
+}
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(39, 39, 42, 0.5) 0%,
+        rgba(63, 63, 70, 0.5) 50%,
+        rgba(39, 39, 42, 0.5) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+/* Hero gradient overlay */
+.hero-gradient {
+    background: linear-gradient(to bottom, 
+        rgba(9, 9, 11, 0) 0%,
+        rgba(9, 9, 11, 0.5) 50%,
+        rgba(9, 9, 11, 1) 100%
+    );
+}
+
+/* Specs list styling */
+.specs-list li::before {
+    content: '';
+    display: none;
 }
