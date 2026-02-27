@@ -56,15 +56,23 @@ export default function HomePage() {
   const filterProducts = () => {
     let filtered = [...products];
 
-    // Search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (p) =>
-          p.product_name.toLowerCase().includes(query) ||
-          p.brand.toLowerCase().includes(query) ||
-          p.specifications.toLowerCase().includes(query)
-      );
+    // Search filter - case-insensitive across all fields
+    if (searchQuery && searchQuery.trim()) {
+      const query = searchQuery.trim().toLowerCase();
+      filtered = filtered.filter((p) => {
+        const name = (p.product_name || "").toLowerCase();
+        const brand = (p.brand || "").toLowerCase();
+        const specs = (p.specifications || "").toLowerCase();
+        const condition = (p.condition || "").toLowerCase();
+        const category = (p.category || "").toLowerCase();
+        return (
+          name.includes(query) ||
+          brand.includes(query) ||
+          specs.includes(query) ||
+          condition.includes(query) ||
+          category.includes(query)
+        );
+      });
     }
 
     // Brand filter
@@ -128,7 +136,7 @@ export default function HomePage() {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center border border-white/10">
                 <Smartphone className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-xl text-white font-['Outfit']">MobileVault</span>
+              <span className="font-bold text-xl text-white font-['Outfit']">Evol India Shop</span>
             </Link>
             
             <Link to="/admin" data-testid="admin-link">
@@ -354,7 +362,7 @@ export default function HomePage() {
       <footer className="border-t border-white/5 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <p className="text-zinc-500 text-sm">
-            © 2024 MobileVault. Premium mobile devices marketplace.
+            © 2024 Evol India Shop. Premium mobile devices marketplace.
           </p>
         </div>
       </footer>

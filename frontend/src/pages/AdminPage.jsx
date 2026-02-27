@@ -176,7 +176,7 @@ export default function AdminPage() {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center border border-white/10">
                 <Smartphone className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-xl text-white font-['Outfit']">MobileVault</span>
+              <span className="font-bold text-xl text-white font-['Outfit']">Evol India Shop</span>
             </Link>
             
             <Badge variant="outline" className="bg-purple-500/10 border-purple-500/30 text-purple-400">
