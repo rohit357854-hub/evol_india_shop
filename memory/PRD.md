@@ -1,9 +1,10 @@
-# MobileVault - Premium Mobile Shop Inventory & Catalog
+# Evol India Shop - Premium Mobile Shop Inventory & Catalog
 
 ## Original Problem Statement
 Build a premium Mobile Shop Inventory & Catalog Web App with:
-- Collection named 'Inventory' with fields for Product Name, Brand, Price, Condition (New/Pre-owned), Main Image, and Specifications
-- Home Page with professional product grid, search bar, filter chips for Brands and Condition, price range filter
+- Collection named 'Inventory' with fields for Product Name, Brand, Price, Condition (New/Pre-owned), Category, Main Image, and Specifications
+- Home Page with professional product grid, search bar, filter chips for Brands, price range filter
+- Navigation: Home (all), Mobiles (new phones), Used Phones (pre-owned), Accessories
 - Product Detail Page with large images, detailed specs, and WhatsApp enquiry button (7404693476)
 - Dark mode with glassmorphism effects, rounded corners, clean typography
 - Admin Panel for CRUD operations
@@ -13,25 +14,27 @@ Build a premium Mobile Shop Inventory & Catalog Web App with:
 2. **Shop Admin** - Store owner managing inventory through admin dashboard
 
 ## Core Requirements (Static)
-- MongoDB Inventory collection with required fields
-- Responsive product grid with filtering (brand, condition, price)
+- MongoDB Inventory collection with required fields + category
+- Responsive product grid with filtering (brand, price)
+- Category-based navigation pages
 - Product detail pages with WhatsApp integration
 - Admin CRUD operations for inventory management
 - Dark theme with glassmorphism UI
 
 ## What's Been Implemented (Jan 2026)
 - ✅ Backend API with FastAPI (11 endpoints)
-- ✅ MongoDB Inventory collection with full CRUD
-- ✅ Home page with product grid, search, filters
-- ✅ Brand filter chips (Apple, Samsung, OnePlus, Xiaomi, Google, Oppo, Vivo)
-- ✅ Condition filter (New/Pre-owned)
+- ✅ MongoDB Inventory collection with full CRUD + category field
+- ✅ Branding: "Evol India Shop"
+- ✅ Navigation menu: Home, Mobiles, Used Phones, Accessories
+- ✅ Case-insensitive search across all fields
+- ✅ Brand filter chips (Apple, Samsung, OnePlus, Xiaomi, Google, Oppo, Vivo, Anker)
 - ✅ Price range slider filter
 - ✅ Product detail page with specs and WhatsApp button
 - ✅ WhatsApp link generates: wa.me/7404693476?text=...
-- ✅ Admin dashboard with table view
+- ✅ Admin dashboard with table view + category field
 - ✅ Add/Edit/Delete products with dialogs
 - ✅ Dark mode with glassmorphism effects
-- ✅ 9 sample products seeded
+- ✅ 18 sample products seeded (11 mobiles, 7 accessories)
 - ✅ Outfit + Inter fonts from design guidelines
 - ✅ 100% test pass rate (backend + frontend)
 
