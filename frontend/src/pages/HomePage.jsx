@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
-import { Search, SlidersHorizontal, Smartphone, X, Settings } from "lucide-react";
+import { Search, SlidersHorizontal, Smartphone, X, Settings, Headphones, RefreshCcw, Home } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
@@ -10,19 +10,47 @@ import ProductCard from "../components/ProductCard";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
-const BRANDS = ["Apple", "Samsung", "OnePlus", "Xiaomi", "Google", "Oppo", "Vivo"];
-const CONDITIONS = ["New", "Pre-owned"];
+const BRANDS = ["Apple", "Samsung", "OnePlus", "Xiaomi", "Google", "Oppo", "Vivo", "Anker"];
 
 export default function HomePage() {
+  const location = useLocation();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBrands, setSelectedBrands] = useState([]);
-  const [selectedConditions, setSelectedConditions] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 200000]);
   const [maxPrice, setMaxPrice] = useState(200000);
   const [showFilters, setShowFilters] = useState(false);
+
+  // Determine current page category from URL
+  const getCurrentCategory = () => {
+    const path = location.pathname;
+    if (path === "/mobiles") return "mobiles";
+    if (path === "/used") return "used";
+    if (path === "/accessories") return "accessories";
+    return "home";
+  };
+
+  const currentCategory = getCurrentCategory();
+
+  const getPageTitle = () => {
+    switch (currentCategory) {
+      case "mobiles": return "Mobile Phones";
+      case "used": return "Pre-owned Phones";
+      case "accessories": return "Accessories";
+      default: return "All Products";
+    }
+  };
+
+  const getPageSubtitle = () => {
+    switch (currentCategory) {
+      case "mobiles": return "Brand new smartphones from top manufacturers";
+      case "used": return "Certified pre-owned devices with warranty";
+      case "accessories": return "Chargers, earbuds, and more";
+      default: return "Discover the latest smartphones and accessories";
+    }
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -30,7 +58,7 @@ export default function HomePage() {
 
   useEffect(() => {
     filterProducts();
-  }, [products, searchQuery, selectedBrands, selectedConditions, priceRange]);
+  }, [products, searchQuery, selectedBrands, priceRange, currentCategory]);
 
   const fetchProducts = async () => {
     try {
@@ -56,6 +84,15 @@ export default function HomePage() {
   const filterProducts = () => {
     let filtered = [...products];
 
+    // Category filter based on current page
+    if (currentCategory === "mobiles") {
+      filtered = filtered.filter((p) => (p.category || "Mobile") === "Mobile" && p.condition === "New");
+    } else if (currentCategory === "used") {
+      filtered = filtered.filter((p) => p.condition === "Pre-owned");
+    } else if (currentCategory === "accessories") {
+      filtered = filtered.filter((p) => (p.category || "Mobile") === "Accessories");
+    }
+
     // Search filter - case-insensitive across all fields
     if (searchQuery && searchQuery.trim()) {
       const query = searchQuery.trim().toLowerCase();
@@ -80,11 +117,6 @@ export default function HomePage() {
       filtered = filtered.filter((p) => selectedBrands.includes(p.brand));
     }
 
-    // Condition filter
-    if (selectedConditions.length > 0) {
-      filtered = filtered.filter((p) => selectedConditions.includes(p.condition));
-    }
-
     // Price filter
     filtered = filtered.filter(
       (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
@@ -101,22 +133,13 @@ export default function HomePage() {
     );
   };
 
-  const toggleCondition = (condition) => {
-    setSelectedConditions((prev) =>
-      prev.includes(condition)
-        ? prev.filter((c) => c !== condition)
-        : [...prev, condition]
-    );
-  };
-
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedBrands([]);
-    setSelectedConditions([]);
     setPriceRange([0, maxPrice]);
   };
 
-  const hasActiveFilters = searchQuery || selectedBrands.length > 0 || selectedConditions.length > 0 || priceRange[0] > 0 || priceRange[1] < maxPrice;
+  const hasActiveFilters = searchQuery || selectedBrands.length > 0 || priceRange[0] > 0 || priceRange[1] < maxPrice;
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-IN", {
@@ -125,6 +148,24 @@ export default function HomePage() {
       maximumFractionDigits: 0,
     }).format(price);
   };
+
+  // Get relevant brands for current category
+  const getRelevantBrands = () => {
+    const relevantProducts = products.filter((p) => {
+      if (currentCategory === "mobiles") return (p.category || "Mobile") === "Mobile" && p.condition === "New";
+      if (currentCategory === "used") return p.condition === "Pre-owned";
+      if (currentCategory === "accessories") return (p.category || "Mobile") === "Accessories";
+      return true;
+    });
+    return [...new Set(relevantProducts.map((p) => p.brand))];
+  };
+
+  const navItems = [
+    { path: "/", label: "Home", icon: Home },
+    { path: "/mobiles", label: "Mobiles", icon: Smartphone },
+    { path: "/used", label: "Used Phones", icon: RefreshCcw },
+    { path: "/accessories", label: "Accessories", icon: Headphones },
+  ];
 
   return (
     <div className="min-h-screen bg-[#09090b]">
@@ -138,6 +179,29 @@ export default function HomePage() {
               </div>
               <span className="font-bold text-xl text-white font-['Outfit']">Evol India Shop</span>
             </Link>
+
+            {/* Navigation Menu */}
+            <nav className="hidden md:flex items-center gap-1" data-testid="nav-menu">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    data-testid={`nav-${item.label.toLowerCase().replace(' ', '-')}`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      isActive
+                        ? "bg-white/10 text-white"
+                        : "text-zinc-400 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
             
             <Link to="/admin" data-testid="admin-link">
               <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white hover:bg-white/5">
@@ -146,26 +210,48 @@ export default function HomePage() {
               </Button>
             </Link>
           </div>
+
+          {/* Mobile Navigation */}
+          <nav className="md:hidden flex items-center gap-1 pb-3 overflow-x-auto" data-testid="mobile-nav-menu">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-zinc-400 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <Icon className="w-3 h-3" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section className="relative py-12 sm:py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-transparent pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl opacity-50 pointer-events-none" />
         
         <div className="max-w-7xl mx-auto relative">
-          <div className="text-center mb-12 animate-fade-in">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 font-['Outfit'] tracking-tight">
-              Premium Mobile Devices
+          <div className="text-center mb-8 animate-fade-in">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 font-['Outfit'] tracking-tight">
+              {getPageTitle()}
             </h1>
-            <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-              Discover the latest smartphones from world-leading brands. New & certified pre-owned.
+            <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto">
+              {getPageSubtitle()}
             </p>
           </div>
 
           {/* Search Bar */}
-          <div className="max-w-2xl mx-auto mb-8 animate-slide-up">
+          <div className="max-w-2xl mx-auto mb-6 animate-slide-up">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
               <Input
@@ -190,12 +276,12 @@ export default function HomePage() {
 
           {/* Filters Panel */}
           {showFilters && (
-            <div className="max-w-4xl mx-auto mb-8 p-6 glass-card rounded-2xl animate-fade-in" data-testid="filters-panel">
+            <div className="max-w-4xl mx-auto mb-6 p-6 glass-card rounded-2xl animate-fade-in" data-testid="filters-panel">
               {/* Brands */}
               <div className="mb-6">
                 <h3 className="text-sm font-medium text-zinc-400 mb-3 uppercase tracking-wider">Brands</h3>
                 <div className="flex flex-wrap gap-2">
-                  {BRANDS.map((brand) => (
+                  {getRelevantBrands().map((brand) => (
                     <button
                       key={brand}
                       data-testid={`brand-filter-${brand.toLowerCase()}`}
@@ -207,29 +293,6 @@ export default function HomePage() {
                       }`}
                     >
                       {brand}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Conditions */}
-              <div className="mb-6">
-                <h3 className="text-sm font-medium text-zinc-400 mb-3 uppercase tracking-wider">Condition</h3>
-                <div className="flex flex-wrap gap-2">
-                  {CONDITIONS.map((condition) => (
-                    <button
-                      key={condition}
-                      data-testid={`condition-filter-${condition.toLowerCase().replace('-', '')}`}
-                      onClick={() => toggleCondition(condition)}
-                      className={`filter-chip px-4 py-2 rounded-full text-sm font-medium border transition-all ${
-                        selectedConditions.includes(condition)
-                          ? condition === "New"
-                            ? "bg-blue-500/20 border-blue-500/30 text-blue-400"
-                            : "bg-orange-500/20 border-orange-500/30 text-orange-400"
-                          : "bg-zinc-900/50 border-white/10 text-zinc-400 hover:text-white"
-                      }`}
-                    >
-                      {condition}
                     </button>
                   ))}
                 </div>
@@ -271,26 +334,6 @@ export default function HomePage() {
               )}
             </div>
           )}
-
-          {/* Quick Filter Chips (always visible) */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
-            {CONDITIONS.map((condition) => (
-              <button
-                key={condition}
-                data-testid={`quick-filter-${condition.toLowerCase().replace('-', '')}`}
-                onClick={() => toggleCondition(condition)}
-                className={`filter-chip px-4 py-2 rounded-full text-sm font-medium border transition-all ${
-                  selectedConditions.includes(condition)
-                    ? condition === "New"
-                      ? "bg-blue-500/20 border-blue-500/30 text-blue-400"
-                      : "bg-orange-500/20 border-orange-500/30 text-orange-400"
-                    : "bg-zinc-900/50 border-white/10 text-zinc-400 hover:text-white"
-                }`}
-              >
-                {condition}
-              </button>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -304,8 +347,7 @@ export default function HomePage() {
                 "Loading..."
               ) : (
                 <>
-                  Showing <span className="text-white font-medium">{filteredProducts.length}</span> of{" "}
-                  <span className="text-white font-medium">{products.length}</span> products
+                  Showing <span className="text-white font-medium">{filteredProducts.length}</span> products
                 </>
               )}
             </p>
