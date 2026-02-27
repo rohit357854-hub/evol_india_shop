@@ -36,14 +36,16 @@ import { Label } from "../components/ui/label";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
-const BRANDS = ["Apple", "Samsung", "OnePlus", "Xiaomi", "Google", "Oppo", "Vivo"];
+const BRANDS = ["Apple", "Samsung", "OnePlus", "Xiaomi", "Google", "Oppo", "Vivo", "Anker"];
 const CONDITIONS = ["New", "Pre-owned"];
+const CATEGORIES = ["Mobile", "Accessories"];
 
 const emptyProduct = {
   product_name: "",
   brand: "Apple",
   price: "",
   condition: "New",
+  category: "Mobile",
   main_image: "",
   specifications: "",
 };
@@ -86,6 +88,7 @@ export default function AdminPage() {
       brand: product.brand,
       price: product.price.toString(),
       condition: product.condition,
+      category: product.category || "Mobile",
       main_image: product.main_image,
       specifications: product.specifications,
     });
@@ -253,6 +256,7 @@ export default function AdminPage() {
               <TableRow className="border-white/5 hover:bg-transparent">
                 <TableHead className="text-zinc-400">Product</TableHead>
                 <TableHead className="text-zinc-400">Brand</TableHead>
+                <TableHead className="text-zinc-400">Category</TableHead>
                 <TableHead className="text-zinc-400">Price</TableHead>
                 <TableHead className="text-zinc-400">Condition</TableHead>
                 <TableHead className="text-zinc-400 text-right">Actions</TableHead>
@@ -262,14 +266,14 @@ export default function AdminPage() {
               {loading ? (
                 [...Array(5)].map((_, i) => (
                   <TableRow key={i} className="border-white/5">
-                    <TableCell colSpan={5}>
+                    <TableCell colSpan={6}>
                       <div className="skeleton h-12 rounded" />
                     </TableCell>
                   </TableRow>
                 ))
               ) : products.length === 0 ? (
                 <TableRow className="border-white/5">
-                  <TableCell colSpan={5} className="text-center py-12">
+                  <TableCell colSpan={6} className="text-center py-12">
                     <Package className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
                     <p className="text-zinc-400">No products yet</p>
                     <Button
@@ -304,6 +308,17 @@ export default function AdminPage() {
                       </div>
                     </TableCell>
                     <TableCell className="text-zinc-300">{product.brand}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`${
+                          (product.category || "Mobile") === "Mobile"
+                            ? "bg-purple-500/20 text-purple-400 border-purple-500/30"
+                            : "bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
+                        } border`}
+                      >
+                        {product.category || "Mobile"}
+                      </Badge>
+                    </TableCell>
                     <TableCell className="text-white font-medium font-['Outfit']">
                       {formatPrice(product.price)}
                     </TableCell>
@@ -393,6 +408,30 @@ export default function AdminPage() {
               </div>
 
               <div className="space-y-2">
+                <Label className="text-zinc-400">Category</Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => handleInputChange("category", value)}
+                >
+                  <SelectTrigger 
+                    className="bg-zinc-800/50 border-white/10 text-white"
+                    data-testid="select-category"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-zinc-900 border-white/10">
+                    {CATEGORIES.map((cat) => (
+                      <SelectItem key={cat} value={cat} className="text-white hover:bg-white/5">
+                        {cat}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
                 <Label className="text-zinc-400">Condition</Label>
                 <Select
                   value={formData.condition}
@@ -413,20 +452,20 @@ export default function AdminPage() {
                   </SelectContent>
                 </Select>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label className="text-zinc-400">Price (INR)</Label>
-              <div className="relative">
-                <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                <Input
-                  data-testid="input-price"
-                  type="number"
-                  placeholder="e.g., 159900"
-                  value={formData.price}
-                  onChange={(e) => handleInputChange("price", e.target.value)}
-                  className="bg-zinc-800/50 border-white/10 text-white pl-9"
-                />
+              <div className="space-y-2">
+                <Label className="text-zinc-400">Price (INR)</Label>
+                <div className="relative">
+                  <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                  <Input
+                    data-testid="input-price"
+                    type="number"
+                    placeholder="e.g., 159900"
+                    value={formData.price}
+                    onChange={(e) => handleInputChange("price", e.target.value)}
+                    className="bg-zinc-800/50 border-white/10 text-white pl-9"
+                  />
+                </div>
               </div>
             </div>
 
