@@ -172,7 +172,9 @@ Test Bulk Phone 2,TestBrand,30000,Pre-owned,Mobile,https://images.unsplash.com/p
         # For this test, we'll simulate the CSV upload by checking if the endpoint exists
         # In a real scenario, we'd need to create a proper multipart/form-data request
         print("   Note: CSV upload test simulated (requires multipart/form-data)")
-        return True, {}
+    def test_get_nonexistent_item(self):
+        """Test getting a non-existent item (should return 404)"""
+        return self.run_test("Get Non-existent Item", "GET", "inventory/nonexistent-id", 404)
 
     def test_stock_decrement(self, item_id):
         """Test stock decrement functionality"""
