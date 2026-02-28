@@ -127,15 +127,23 @@ class MobileShopAPITester:
 
     def test_update_inventory_item(self, item_id):
         """Test updating an inventory item"""
-        if not item_id:
-            print("❌ Skipped - No item ID provided")
+        if not item_id or not self.admin_token:
+            print("❌ Skipped - No item ID or admin token provided")
             return False, {}
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.admin_token}'
+        }
         
         update_data = {
             "price": 45000,
+            "color": "Updated Blue",
+            "ram_rom": "12GB/256GB",
+            "stock_count": 20,
             "specifications": "• Updated processor\n• Updated display\n• Updated camera"
         }
-        return self.run_test("Update Inventory Item", "PUT", f"inventory/{item_id}", 200, update_data)
+        return self.run_test("Update Inventory Item", "PUT", f"inventory/{item_id}", 200, update_data, headers)
 
     def test_delete_inventory_item(self, item_id):
         """Test deleting an inventory item"""
