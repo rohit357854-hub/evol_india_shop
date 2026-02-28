@@ -1,10 +1,10 @@
 {
   "summary": {
-    "total_tests": 11,
-    "passed_tests": 11,
-    "failed_tests": 0,
-    "success_rate": 100.0,
-    "timestamp": "2026-02-27T12:31:58.244212"
+    "total_tests": 15,
+    "passed_tests": 14,
+    "failed_tests": 1,
+    "success_rate": 93.33333333333333,
+    "timestamp": "2026-02-28T18:11:35.602500"
   },
   "detailed_results": [
     {
@@ -14,25 +14,25 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"message\":\"Mobile Shop Inventory API\"}"
+      "response_preview": "{\"message\":\"Evol India Shop API\"}"
     },
     {
-      "test": "Create Status Check",
+      "test": "Admin Login",
       "method": "POST",
-      "endpoint": "status",
+      "endpoint": "admin/login",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"225b0a71-33db-4930-9e47-e13c8665d22f\",\"client_name\":\"test_client\",\"timestamp\":\"2026-02-27T12:"
+      "response_preview": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc3MjM4ODY5M30.CT76OyslU"
     },
     {
-      "test": "Get Status Checks",
+      "test": "Admin Verify Token",
       "method": "GET",
-      "endpoint": "status",
+      "endpoint": "admin/verify",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "[{\"id\":\"2e712583-41e8-4271-a952-42eaf843bb53\",\"client_name\":\"test_client\",\"timestamp\":\"2026-02-27T11"
+      "response_preview": "{\"valid\":true,\"username\":\"admin\"}"
     },
     {
       "test": "Seed Database",
@@ -41,7 +41,70 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"message\":\"Database already seeded\",\"count\":18}"
+      "response_preview": "{\"message\":\"Database already seeded\",\"count\":36}"
+    },
+    {
+      "test": "Get Settings",
+      "method": "GET",
+      "endpoint": "settings",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"shop_settings\",\"shop_name\":\"Evol India Shop\",\"address\":\"Delhi Rohtak Road, Metro Pillar No. 8"
+    },
+    {
+      "test": "Update Settings",
+      "method": "PUT",
+      "endpoint": "settings",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Settings updated successfully\"}"
+    },
+    {
+      "test": "Get Public Banners",
+      "method": "GET",
+      "endpoint": "banners",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "[{\"id\":\"6b8620e7-a9b1-463a-b45f-f0d2f488bbb1\",\"image_url\":\"https://images.unsplash.com/photo-1556656"
+    },
+    {
+      "test": "Get All Banners (Admin)",
+      "method": "GET",
+      "endpoint": "banners/all",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "[{\"id\":\"6b8620e7-a9b1-463a-b45f-f0d2f488bbb1\",\"image_url\":\"https://images.unsplash.com/photo-1556656"
+    },
+    {
+      "test": "Create Banner",
+      "method": "POST",
+      "endpoint": "banners",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"8c24e9da-708e-4d63-b801-84be61fa807b\",\"image_url\":\"https://images.unsplash.com/photo-15566567"
+    },
+    {
+      "test": "Update Banner",
+      "method": "PUT",
+      "endpoint": "banners/8c24e9da-708e-4d63-b801-84be61fa807b",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Banner updated successfully\"}"
+    },
+    {
+      "test": "Delete Banner",
+      "method": "DELETE",
+      "endpoint": "banners/8c24e9da-708e-4d63-b801-84be61fa807b",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Banner deleted successfully\"}"
     },
     {
       "test": "Get All Inventory",
@@ -50,7 +113,7 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "[{\"id\":\"ac165826-ee02-4220-af13-f28c0206a49e\",\"product_name\":\"iPhone 15 Pro Max\",\"brand\":\"Apple\",\"pr"
+      "response_preview": "[{\"id\":\"7227f202-9650-4a88-abb8-732ee82da65e\",\"product_name\":\"iPhone 15 Pro Max\",\"brand\":\"Apple\",\"pr"
     },
     {
       "test": "Get Brands",
@@ -65,28 +128,10 @@
       "test": "Create Inventory Item",
       "method": "POST",
       "endpoint": "inventory",
-      "expected_status": 200,
+      "expected_status": 201,
       "actual_status": 200,
-      "success": true,
-      "response_preview": "{\"id\":\"85bdc311-5a0e-4c2f-9a62-884d519a3cf7\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
-    },
-    {
-      "test": "Get Single Inventory Item",
-      "method": "GET",
-      "endpoint": "inventory/85bdc311-5a0e-4c2f-9a62-884d519a3cf7",
-      "expected_status": 200,
-      "actual_status": 200,
-      "success": true,
-      "response_preview": "{\"id\":\"85bdc311-5a0e-4c2f-9a62-884d519a3cf7\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
-    },
-    {
-      "test": "Update Inventory Item",
-      "method": "PUT",
-      "endpoint": "inventory/85bdc311-5a0e-4c2f-9a62-884d519a3cf7",
-      "expected_status": 200,
-      "actual_status": 200,
-      "success": true,
-      "response_preview": "{\"id\":\"85bdc311-5a0e-4c2f-9a62-884d519a3cf7\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+      "success": false,
+      "response_preview": "{\"id\":\"fbd57d40-9e8d-4b67-b237-dca8854f3d5f\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
     },
     {
       "test": "Get Non-existent Item",
@@ -96,15 +141,6 @@
       "actual_status": 404,
       "success": true,
       "response_preview": "{\"detail\":\"Item not found\"}"
-    },
-    {
-      "test": "Delete Inventory Item",
-      "method": "DELETE",
-      "endpoint": "inventory/85bdc311-5a0e-4c2f-9a62-884d519a3cf7",
-      "expected_status": 200,
-      "actual_status": 200,
-      "success": true,
-      "response_preview": "{\"message\":\"Item deleted successfully\"}"
     }
   ]
 }
