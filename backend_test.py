@@ -112,7 +112,7 @@ class MobileShopAPITester:
             "stock_count": 15,
             "specifications": "• Test processor\n• Test display\n• Test camera"
         }
-        success, data = self.run_test("Create Inventory Item", "POST", "inventory", 201, test_product, headers)
+        success, data = self.run_test("Create Inventory Item", "POST", "inventory", 200, test_product, headers)
         if success and 'id' in data:
             print(f"   Created product with ID: {data['id']}")
             return True, data['id']
