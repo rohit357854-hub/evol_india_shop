@@ -22,20 +22,50 @@ Build a premium Mobile Shop Inventory & Catalog Web App with:
 - Dark theme with glassmorphism UI
 
 ## What's Been Implemented (Jan 2026)
+
+### Phase 1 (Initial Build)
 - ✅ Backend API with FastAPI (11 endpoints)
 - ✅ MongoDB Inventory collection with full CRUD + category field
 - ✅ Branding: "Evol India Shop"
 - ✅ Navigation menu: Home, Mobiles, Used Phones, Accessories
 - ✅ Case-insensitive search across all fields
-- ✅ Brand filter chips (Apple, Samsung, OnePlus, Xiaomi, Google, Oppo, Vivo, Anker)
+- ✅ Brand filter chips
 - ✅ Price range slider filter
 - ✅ Product detail page with specs and WhatsApp button
-- ✅ WhatsApp link generates: wa.me/7404693476?text=...
-- ✅ Admin dashboard with table view + category field
-- ✅ Add/Edit/Delete products with dialogs
 - ✅ Dark mode with glassmorphism effects
+- ✅ Outfit + Inter fonts
+
+### Phase 2 (Major Feature Update)
+- ✅ Admin Authentication (JWT-based)
+  - /admin/login page with secure login
+  - Default credentials: admin / admin123
+  - Protected admin routes
+- ✅ Bulk CSV Upload for products
+- ✅ Enhanced Product Schema:
+  - Multiple images (array)
+  - Color variant
+  - RAM/ROM specifications
+  - Stock count (hidden from public, shows In Stock/Out of Stock only)
+- ✅ Hero Slider with promotional banners
+  - Auto-rotation every 5 seconds
+  - Navigation arrows and dots
+- ✅ CMS Settings Page:
+  - Edit shop name, address, phone, WhatsApp number
+  - Edit developer credit name
+  - Edit SEO meta title and description
+- ✅ Banner Management:
+  - Add/edit/delete promotional banners
+  - Set banner order and active status
+- ✅ Enhanced Footer:
+  - Store address: Delhi Rohtak Road, Metro Pillar 844
+  - View on Google Maps button
+  - WhatsApp chat button
+  - Developer credit line
+- ✅ SEO Optimization:
+  - Meta title: "Evol India Shop - Best Mobiles & Accessories in Bahadurgarh"
+  - Meta description with keywords
+  - Open Graph tags
 - ✅ 18 sample products seeded (11 mobiles, 7 accessories)
-- ✅ Outfit + Inter fonts from design guidelines
 - ✅ 100% test pass rate (backend + frontend)
 
 ## Architecture
@@ -45,16 +75,27 @@ Build a premium Mobile Shop Inventory & Catalog Web App with:
 - **Styling**: Dark theme, glassmorphism, Outfit/Inter fonts
 
 ## API Endpoints
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/ | Health check |
-| GET | /api/inventory | Get all products |
-| GET | /api/inventory/{id} | Get single product |
-| POST | /api/inventory | Create product |
-| PUT | /api/inventory/{id} | Update product |
-| DELETE | /api/inventory/{id} | Delete product |
-| GET | /api/brands | Get unique brands |
-| POST | /api/seed | Seed sample data |
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | /api/admin/login | Admin login | No |
+| GET | /api/admin/verify | Verify JWT token | Yes |
+| GET | /api/ | Health check | No |
+| GET | /api/inventory | Get all products | No |
+| GET | /api/inventory/{id} | Get single product | No |
+| POST | /api/inventory | Create product | Yes |
+| PUT | /api/inventory/{id} | Update product | Yes |
+| DELETE | /api/inventory/{id} | Delete product | Yes |
+| POST | /api/inventory/bulk-upload | CSV bulk upload | Yes |
+| POST | /api/inventory/{id}/decrement-stock | Decrease stock | Yes |
+| GET | /api/settings | Get shop settings | No |
+| PUT | /api/settings | Update settings | Yes |
+| GET | /api/banners | Get active banners | No |
+| GET | /api/banners/all | Get all banners | Yes |
+| POST | /api/banners | Create banner | Yes |
+| PUT | /api/banners/{id} | Update banner | Yes |
+| DELETE | /api/banners/{id} | Delete banner | Yes |
+| GET | /api/brands | Get unique brands | No |
+| POST | /api/seed | Seed sample data | No |
 
 ## Prioritized Backlog
 
