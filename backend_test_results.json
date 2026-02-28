@@ -1,10 +1,10 @@
 {
   "summary": {
-    "total_tests": 15,
-    "passed_tests": 14,
-    "failed_tests": 1,
-    "success_rate": 93.33333333333333,
-    "timestamp": "2026-02-28T18:11:35.602500"
+    "total_tests": 19,
+    "passed_tests": 19,
+    "failed_tests": 0,
+    "success_rate": 100.0,
+    "timestamp": "2026-02-28T18:11:47.601846"
   },
   "detailed_results": [
     {
@@ -23,7 +23,7 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc3MjM4ODY5M30.CT76OyslU"
+      "response_preview": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc3MjM4ODcwNX0.lc34BNUwU"
     },
     {
       "test": "Admin Verify Token",
@@ -41,7 +41,7 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"message\":\"Database already seeded\",\"count\":36}"
+      "response_preview": "{\"message\":\"Database already seeded\",\"count\":37}"
     },
     {
       "test": "Get Settings",
@@ -50,7 +50,7 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"shop_settings\",\"shop_name\":\"Evol India Shop\",\"address\":\"Delhi Rohtak Road, Metro Pillar No. 8"
+      "response_preview": "{\"id\":\"shop_settings\",\"shop_name\":\"Evol India Shop Test\",\"address\":\"Delhi Rohtak Road, Metro Pillar "
     },
     {
       "test": "Update Settings",
@@ -86,12 +86,12 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"8c24e9da-708e-4d63-b801-84be61fa807b\",\"image_url\":\"https://images.unsplash.com/photo-15566567"
+      "response_preview": "{\"id\":\"a6639cc5-a7c1-4284-b796-c4a5520193b7\",\"image_url\":\"https://images.unsplash.com/photo-15566567"
     },
     {
       "test": "Update Banner",
       "method": "PUT",
-      "endpoint": "banners/8c24e9da-708e-4d63-b801-84be61fa807b",
+      "endpoint": "banners/a6639cc5-a7c1-4284-b796-c4a5520193b7",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
@@ -100,7 +100,7 @@
     {
       "test": "Delete Banner",
       "method": "DELETE",
-      "endpoint": "banners/8c24e9da-708e-4d63-b801-84be61fa807b",
+      "endpoint": "banners/a6639cc5-a7c1-4284-b796-c4a5520193b7",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
@@ -122,16 +122,43 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "[\"Anker\",\"Apple\",\"Google\",\"OnePlus\",\"Oppo\",\"Samsung\",\"Vivo\",\"Xiaomi\"]"
+      "response_preview": "[\"Anker\",\"Apple\",\"Google\",\"OnePlus\",\"Oppo\",\"Samsung\",\"TestBrand\",\"Vivo\",\"Xiaomi\"]"
     },
     {
       "test": "Create Inventory Item",
       "method": "POST",
       "endpoint": "inventory",
-      "expected_status": 201,
+      "expected_status": 200,
       "actual_status": 200,
-      "success": false,
-      "response_preview": "{\"id\":\"fbd57d40-9e8d-4b67-b237-dca8854f3d5f\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+      "success": true,
+      "response_preview": "{\"id\":\"3423e287-4bc3-4db9-8dd5-e15ecd5111ef\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+    },
+    {
+      "test": "Get Single Inventory Item",
+      "method": "GET",
+      "endpoint": "inventory/3423e287-4bc3-4db9-8dd5-e15ecd5111ef",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"3423e287-4bc3-4db9-8dd5-e15ecd5111ef\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+    },
+    {
+      "test": "Update Inventory Item",
+      "method": "PUT",
+      "endpoint": "inventory/3423e287-4bc3-4db9-8dd5-e15ecd5111ef",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"3423e287-4bc3-4db9-8dd5-e15ecd5111ef\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+    },
+    {
+      "test": "Decrement Stock",
+      "method": "POST",
+      "endpoint": "inventory/3423e287-4bc3-4db9-8dd5-e15ecd5111ef/decrement-stock",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Stock updated\",\"new_stock\":18}"
     },
     {
       "test": "Get Non-existent Item",
@@ -141,6 +168,15 @@
       "actual_status": 404,
       "success": true,
       "response_preview": "{\"detail\":\"Item not found\"}"
+    },
+    {
+      "test": "Delete Inventory Item",
+      "method": "DELETE",
+      "endpoint": "inventory/3423e287-4bc3-4db9-8dd5-e15ecd5111ef",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Item deleted successfully\"}"
     }
   ]
 }
