@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "sonner";
 import HomePage from "./pages/HomePage";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminPage from "./pages/AdminPage";
 import "@/App.css";
 
@@ -15,6 +16,7 @@ function App() {
           <Route path="/used" element={<HomePage />} />
           <Route path="/accessories" element={<HomePage />} />
           <Route path="/product/:id" element={<ProductDetailPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </BrowserRouter>
