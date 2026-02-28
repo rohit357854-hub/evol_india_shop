@@ -89,16 +89,30 @@ class MobileShopAPITester:
         return self.run_test("Get Brands", "GET", "brands", 200)
 
     def test_create_inventory_item(self):
-        """Test creating a new inventory item"""
+        """Test creating a new inventory item with new fields"""
+        if not self.admin_token:
+            print("❌ Skipped - No admin token available")
+            return False, None
+            
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.admin_token}'
+        }
+        
         test_product = {
             "product_name": "Test Phone XYZ",
             "brand": "TestBrand",
             "price": 50000,
             "condition": "New",
+            "category": "Mobile",
             "main_image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80",
+            "images": ["https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80"],
+            "color": "Test Black",
+            "ram_rom": "8GB/128GB",
+            "stock_count": 15,
             "specifications": "• Test processor\n• Test display\n• Test camera"
         }
-        success, data = self.run_test("Create Inventory Item", "POST", "inventory", 200, test_product)
+        success, data = self.run_test("Create Inventory Item", "POST", "inventory", 201, test_product, headers)
         if success and 'id' in data:
             print(f"   Created product with ID: {data['id']}")
             return True, data['id']
