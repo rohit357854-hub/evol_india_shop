@@ -134,16 +134,108 @@ class MobileShopAPITester:
         """Test getting a non-existent item (should return 404)"""
         return self.run_test("Get Non-existent Item", "GET", "inventory/nonexistent-id", 404)
 
-    def test_status_endpoints(self):
-        """Test status check endpoints"""
-        # Test creating status check
-        status_data = {"client_name": "test_client"}
-        success1, _ = self.run_test("Create Status Check", "POST", "status", 200, status_data)
+    def test_admin_login(self):
+        """Test admin login with default credentials"""
+        login_data = {
+            "username": "admin",
+            "password": "admin123"
+        }
+        success, data = self.run_test("Admin Login", "POST", "admin/login", 200, login_data)
+        if success and 'token' in data:
+            self.admin_token = data['token']
+            print(f"   Admin token obtained: {self.admin_token[:20]}...")
+            return True, data
+        return False, {}
+
+    def test_admin_verify(self):
+        """Test admin token verification"""
+        if not self.admin_token:
+            print("❌ Skipped - No admin token available")
+            return False, {}
         
-        # Test getting status checks
-        success2, _ = self.run_test("Get Status Checks", "GET", "status", 200)
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.admin_token}'
+        }
+        return self.run_test("Admin Verify Token", "GET", "admin/verify", 200, headers=headers)
+
+    def test_settings_endpoints(self):
+        """Test settings endpoints"""
+        # Test getting settings
+        success1, settings_data = self.run_test("Get Settings", "GET", "settings", 200)
         
-        return success1 and success2
+        # Test updating settings (requires auth)
+        if self.admin_token and success1:
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {self.admin_token}'
+            }
+            update_data = {
+                "id": "shop_settings",
+                "shop_name": "Evol India Shop Test",
+                "address": "Delhi Rohtak Road, Metro Pillar No. 844, Near Standard Sweet, Bahadurgarh",
+                "phone": "7404693476",
+                "whatsapp": "7404693476",
+                "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Bahadurgarh+Metro+Pillar+844",
+                "developer_name": "Developer",
+                "meta_title": "Evol India Shop - Best Mobiles & Accessories in Bahadurgarh",
+                "meta_description": "Premium mobile phones, pre-owned devices, and accessories at best prices in Bahadurgarh. Visit us near Metro Pillar 844."
+            }
+            success2, _ = self.run_test("Update Settings", "PUT", "settings", 200, update_data, headers)
+            return success1 and success2
+        
+        return success1
+
+    def test_banner_endpoints(self):
+        """Test banner endpoints"""
+        # Test getting public banners
+        success1, banners_data = self.run_test("Get Public Banners", "GET", "banners", 200)
+        
+        if not self.admin_token:
+            print("❌ Skipped admin banner tests - No admin token available")
+            return success1
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.admin_token}'
+        }
+        
+        # Test getting all banners (admin only)
+        success2, _ = self.run_test("Get All Banners (Admin)", "GET", "banners/all", 200, headers=headers)
+        
+        # Test creating a banner
+        banner_data = {
+            "image_url": "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1920&q=80",
+            "title": "Test Banner",
+            "subtitle": "Test subtitle",
+            "link": "/test",
+            "is_active": True,
+            "order": 99
+        }
+        success3, created_banner = self.run_test("Create Banner", "POST", "banners", 200, banner_data, headers)
+        
+        banner_id = None
+        if success3 and 'id' in created_banner:
+            banner_id = created_banner['id']
+            print(f"   Created banner with ID: {banner_id}")
+            
+            # Test updating the banner
+            update_data = {
+                "image_url": "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=1920&q=80",
+                "title": "Updated Test Banner",
+                "subtitle": "Updated subtitle",
+                "link": "/updated",
+                "is_active": False,
+                "order": 100
+            }
+            success4, _ = self.run_test("Update Banner", "PUT", f"banners/{banner_id}", 200, update_data, headers)
+            
+            # Test deleting the banner
+            success5, _ = self.run_test("Delete Banner", "DELETE", f"banners/{banner_id}", 200, headers=headers)
+            
+            return success1 and success2 and success3 and success4 and success5
+        
+        return success1 and success2 and success3
 
 def main():
     print("🚀 Starting Mobile Shop API Tests...")
