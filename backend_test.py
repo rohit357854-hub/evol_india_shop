@@ -294,7 +294,7 @@ Test Bulk Phone 2,TestBrand,30000,Pre-owned,Mobile,https://images.unsplash.com/p
         return success1 and success2 and success3
 
 def main():
-    print("🚀 Starting Mobile Shop API Tests...")
+    print("🚀 Starting Evol India Shop API Tests...")
     print("=" * 50)
     
     # Setup
@@ -304,10 +304,19 @@ def main():
     # Run tests in sequence
     print("\n📋 Testing Basic Endpoints...")
     tester.test_root_endpoint()
-    tester.test_status_endpoints()
+    
+    print("\n📋 Testing Admin Authentication...")
+    tester.test_admin_login()
+    tester.test_admin_verify()
     
     print("\n📋 Testing Database Seeding...")
     tester.test_seed_database()
+    
+    print("\n📋 Testing Settings Endpoints...")
+    tester.test_settings_endpoints()
+    
+    print("\n📋 Testing Banner Endpoints...")
+    tester.test_banner_endpoints()
     
     print("\n📋 Testing Inventory Read Operations...")
     success, inventory_data = tester.test_get_all_inventory()
@@ -317,6 +326,10 @@ def main():
     success, created_item_id = tester.test_create_inventory_item()
     tester.test_get_single_inventory_item(created_item_id)
     tester.test_update_inventory_item(created_item_id)
+    tester.test_stock_decrement(created_item_id)
+    
+    print("\n📋 Testing Bulk Upload...")
+    tester.test_bulk_upload_csv()
     
     print("\n📋 Testing Error Handling...")
     tester.test_get_nonexistent_item()
