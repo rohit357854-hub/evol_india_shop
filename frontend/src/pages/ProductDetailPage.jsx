@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ArrowLeft, Smartphone, Package, Shield, ChevronRight } from "lucide-react";
+import { ArrowLeft, Smartphone, Package, Shield, ChevronRight, Check, X as XIcon } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
-const WHATSAPP_NUMBER = "7404693476";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -15,20 +14,25 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [settings, setSettings] = useState(null);
 
   useEffect(() => {
-    fetchProduct();
+    fetchData();
   }, [id]);
 
-  const fetchProduct = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`${API}/inventory/${id}`);
-      setProduct(response.data);
+      const [productRes, allProductsRes, settingsRes] = await Promise.all([
+        axios.get(`${API}/inventory/${id}`),
+        axios.get(`${API}/inventory`),
+        axios.get(`${API}/settings`)
+      ]);
       
-      // Fetch related products (same brand)
-      const allProducts = await axios.get(`${API}/inventory`);
-      const related = allProducts.data
-        .filter((p) => p.brand === response.data.brand && p.id !== id)
+      setProduct(productRes.data);
+      setSettings(settingsRes.data);
+      
+      const related = allProductsRes.data
+        .filter((p) => p.brand === productRes.data.brand && p.id !== id)
         .slice(0, 3);
       setRelatedProducts(related);
     } catch (error) {
@@ -48,10 +52,11 @@ export default function ProductDetailPage() {
   };
 
   const generateWhatsAppLink = () => {
+    const whatsappNumber = settings?.whatsapp || "7404693476";
     const message = encodeURIComponent(
       `Hi, I'm interested in the ${product.product_name} (${product.condition}) listed at ${formatPrice(product.price)}. Is it still available?`
     );
-    return `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+    return `https://wa.me/${whatsappNumber}?text=${message}`;
   };
 
   if (loading) {
@@ -67,6 +72,7 @@ export default function ProductDetailPage() {
   }
 
   const specsList = product.specifications.split("\n").filter((s) => s.trim());
+  const isInStock = (product.stock_count || 0) > 0;
 
   return (
     <div className="min-h-screen bg-[#09090b]">
@@ -114,8 +120,8 @@ export default function ProductDetailPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
-              {/* Condition Badge */}
-              <div className="absolute top-4 left-4">
+              {/* Badges */}
+              <div className="absolute top-4 left-4 flex flex-col gap-2">
                 <Badge
                   data-testid="condition-badge"
                   className={`${
@@ -125,6 +131,21 @@ export default function ProductDetailPage() {
                   } px-4 py-1.5 text-sm font-medium rounded-full border backdrop-blur-sm`}
                 >
                   {product.condition}
+                </Badge>
+              </div>
+
+              {/* Stock Badge */}
+              <div className="absolute top-4 right-4">
+                <Badge
+                  data-testid="stock-badge"
+                  className={`${
+                    isInStock
+                      ? "bg-green-500/20 text-green-400 border-green-500/30"
+                      : "bg-red-500/20 text-red-400 border-red-500/30"
+                  } px-4 py-1.5 text-sm font-medium rounded-full border backdrop-blur-sm flex items-center gap-2`}
+                >
+                  {isInStock ? <Check className="w-4 h-4" /> : <XIcon className="w-4 h-4" />}
+                  {isInStock ? "In Stock" : "Out of Stock"}
                 </Badge>
               </div>
             </div>
@@ -163,11 +184,18 @@ export default function ProductDetailPage() {
 
             {/* Product Name */}
             <h1 
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 font-['Outfit'] tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 font-['Outfit'] tracking-tight"
               data-testid="product-name"
             >
               {product.product_name}
             </h1>
+
+            {/* Color & RAM/ROM */}
+            {(product.color || product.ram_rom) && (
+              <p className="text-zinc-400 mb-4">
+                {[product.color, product.ram_rom].filter(Boolean).join(" | ")}
+              </p>
+            )}
 
             {/* Price */}
             <div className="flex items-baseline gap-3 mb-8">
@@ -183,16 +211,28 @@ export default function ProductDetailPage() {
             </div>
 
             {/* WhatsApp CTA */}
-            <a
-              href={generateWhatsAppLink()}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-testid="whatsapp-enquiry-btn"
-              className="whatsapp-btn inline-flex items-center justify-center gap-3 w-full sm:w-auto bg-[#25D366] text-white hover:bg-[#128C7E] rounded-full px-8 py-4 font-bold text-lg shadow-[0_0_30px_rgba(37,211,102,0.3)] transition-all animate-pulse-glow mb-10"
-            >
-              <FaWhatsapp className="w-6 h-6" />
-              Enquire on WhatsApp
-            </a>
+            {isInStock ? (
+              <a
+                href={generateWhatsAppLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid="whatsapp-enquiry-btn"
+                className="whatsapp-btn inline-flex items-center justify-center gap-3 w-full sm:w-auto bg-[#25D366] text-white hover:bg-[#128C7E] rounded-full px-8 py-4 font-bold text-lg shadow-[0_0_30px_rgba(37,211,102,0.3)] transition-all animate-pulse-glow mb-10"
+              >
+                <FaWhatsapp className="w-6 h-6" />
+                Enquire on WhatsApp
+              </a>
+            ) : (
+              <div className="mb-10">
+                <Button
+                  disabled
+                  className="w-full sm:w-auto bg-zinc-800 text-zinc-400 rounded-full px-8 py-4 font-bold text-lg cursor-not-allowed"
+                >
+                  Currently Out of Stock
+                </Button>
+                <p className="text-zinc-500 text-sm mt-2">Contact us on WhatsApp for availability updates</p>
+              </div>
+            )}
 
             {/* Specifications */}
             <div className="glass-card rounded-2xl p-6">
@@ -235,7 +275,7 @@ export default function ProductDetailPage() {
                   className="product-card glass-card rounded-2xl overflow-hidden hover:border-white/20"
                   data-testid={`related-product-${relatedProduct.id}`}
                 >
-                  <div className="aspect-[4/3] overflow-hidden">
+                  <div className="aspect-[4/3] overflow-hidden relative">
                     <img
                       src={relatedProduct.main_image}
                       alt={relatedProduct.product_name}
@@ -244,6 +284,12 @@ export default function ProductDetailPage() {
                         e.target.src = "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80";
                       }}
                     />
+                    {/* Stock Badge */}
+                    <div className="absolute top-2 right-2">
+                      <Badge className={`${(relatedProduct.stock_count || 0) > 0 ? "bg-green-500/20 text-green-400 border-green-500/30" : "bg-red-500/20 text-red-400 border-red-500/30"} px-2 py-0.5 text-xs rounded-full border backdrop-blur-sm`}>
+                        {(relatedProduct.stock_count || 0) > 0 ? "In Stock" : "Out"}
+                      </Badge>
+                    </div>
                   </div>
                   <div className="p-4">
                     <p className="text-zinc-500 text-xs uppercase tracking-wider mb-1">
