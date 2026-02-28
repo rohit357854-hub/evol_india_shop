@@ -147,10 +147,15 @@ class MobileShopAPITester:
 
     def test_delete_inventory_item(self, item_id):
         """Test deleting an inventory item"""
-        if not item_id:
-            print("❌ Skipped - No item ID provided")
+        if not item_id or not self.admin_token:
+            print("❌ Skipped - No item ID or admin token provided")
             return False, {}
-        return self.run_test("Delete Inventory Item", "DELETE", f"inventory/{item_id}", 200)
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.admin_token}'
+        }
+        return self.run_test("Delete Inventory Item", "DELETE", f"inventory/{item_id}", 200, headers=headers)
 
     def test_get_nonexistent_item(self):
         """Test getting a non-existent item (should return 404)"""
