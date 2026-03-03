@@ -83,6 +83,10 @@ export default function AdminPage() {
   const [productToDelete, setProductToDelete] = useState(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  
+  // Password change state
+  const [passwordData, setPasswordData] = useState({ old_password: "", new_password: "", confirm_password: "" });
+  const [changingPassword, setChangingPassword] = useState(false);
 
   const getAuthHeaders = () => ({
     headers: { Authorization: `Bearer ${localStorage.getItem("adminToken")}` }
