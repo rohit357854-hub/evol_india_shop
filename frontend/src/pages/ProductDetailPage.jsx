@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ArrowLeft, Smartphone, Package, Shield, ChevronRight, Check, X as XIcon } from "lucide-react";
+import { ArrowLeft, Smartphone, Package, Shield, ChevronRight, Check, X as XIcon, ChevronLeft } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
@@ -15,6 +15,7 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [settings, setSettings] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     fetchData();
@@ -30,6 +31,7 @@ export default function ProductDetailPage() {
       
       setProduct(productRes.data);
       setSettings(settingsRes.data);
+      setCurrentImageIndex(0);
       
       const related = allProductsRes.data
         .filter((p) => p.brand === productRes.data.brand && p.id !== id)
@@ -57,6 +59,46 @@ export default function ProductDetailPage() {
       `Hi, I'm interested in the ${product.product_name} (${product.condition}) listed at ${formatPrice(product.price)}. Is it still available?`
     );
     return `https://wa.me/${whatsappNumber}?text=${message}`;
+  };
+
+  // Get all images - parse comma-separated URLs from main_image and combine with images array
+  const getAllImages = () => {
+    if (!product) return [];
+    
+    const images = [];
+    
+    // Parse main_image for comma-separated URLs
+    if (product.main_image) {
+      const mainImages = product.main_image.split(',').map(url => url.trim()).filter(url => url);
+      images.push(...mainImages);
+    }
+    
+    // Add images from the images array
+    if (product.images && Array.isArray(product.images)) {
+      product.images.forEach(img => {
+        if (img && !images.includes(img.trim())) {
+          images.push(img.trim());
+        }
+      });
+    }
+    
+    // Fallback if no images
+    if (images.length === 0) {
+      images.push("https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80");
+    }
+    
+    return images;
+  };
+
+  const allImages = product ? getAllImages() : [];
+  const hasMultipleImages = allImages.length > 1;
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % allImages.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
   };
 
   if (loading) {
@@ -106,13 +148,14 @@ export default function ProductDetailPage() {
       {/* Product Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Image Section */}
+          {/* Image Section with Slider */}
           <div className="animate-fade-in">
             <div className="aspect-square rounded-3xl overflow-hidden bg-zinc-900/50 border border-white/5 relative group">
+              {/* Main Image */}
               <img
                 data-testid="product-image"
-                src={product.main_image}
-                alt={product.product_name}
+                src={allImages[currentImageIndex]}
+                alt={`${product.product_name} - Image ${currentImageIndex + 1}`}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 onError={(e) => {
                   e.target.src = "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80";
@@ -120,8 +163,33 @@ export default function ProductDetailPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
+              {/* Navigation Arrows for Multiple Images */}
+              {hasMultipleImages && (
+                <>
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition-colors z-10"
+                    data-testid="image-prev"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/70 transition-colors z-10"
+                    data-testid="image-next"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                  
+                  {/* Image Counter */}
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white text-sm z-10">
+                    {currentImageIndex + 1} / {allImages.length}
+                  </div>
+                </>
+              )}
+              
               {/* Badges */}
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
+              <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
                 <Badge
                   data-testid="condition-badge"
                   className={`${
@@ -135,7 +203,7 @@ export default function ProductDetailPage() {
               </div>
 
               {/* Stock Badge */}
-              <div className="absolute top-4 right-4">
+              <div className="absolute top-4 right-4 z-10">
                 <Badge
                   data-testid="stock-badge"
                   className={`${
@@ -149,6 +217,32 @@ export default function ProductDetailPage() {
                 </Badge>
               </div>
             </div>
+
+            {/* Thumbnail Strip for Multiple Images */}
+            {hasMultipleImages && (
+              <div className="flex gap-2 mt-4 overflow-x-auto pb-2" data-testid="image-thumbnails">
+                {allImages.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                      index === currentImageIndex
+                        ? "border-white/50 ring-2 ring-blue-500/50"
+                        : "border-white/10 hover:border-white/30"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`Thumbnail ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src = "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100&q=80";
+                      }}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Trust Badges */}
             <div className="grid grid-cols-2 gap-4 mt-6">
@@ -277,7 +371,7 @@ export default function ProductDetailPage() {
                 >
                   <div className="aspect-[4/3] overflow-hidden relative">
                     <img
-                      src={relatedProduct.main_image}
+                      src={relatedProduct.main_image?.split(',')[0]?.trim() || relatedProduct.main_image}
                       alt={relatedProduct.product_name}
                       className="product-image w-full h-full object-cover"
                       onError={(e) => {
