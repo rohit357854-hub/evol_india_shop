@@ -422,6 +422,7 @@ def main():
     # Setup
     tester = MobileShopAPITester()
     created_item_id = None
+    multi_image_item_id = None
 
     # Run tests in sequence
     print("\n📋 Testing Basic Endpoints...")
@@ -450,6 +451,13 @@ def main():
     tester.test_update_inventory_item(created_item_id)
     tester.test_stock_decrement(created_item_id)
     
+    print("\n📋 Testing Multi-Image Feature...")
+    success, multi_image_item_id = tester.test_multi_image_product()
+    
+    print("\n📋 Testing Admin Password Change...")
+    tester.test_admin_change_password()
+    tester.test_password_validation()
+    
     print("\n📋 Testing Bulk Upload...")
     tester.test_bulk_upload_csv()
     
@@ -458,6 +466,8 @@ def main():
     
     print("\n📋 Testing Cleanup...")
     tester.test_delete_inventory_item(created_item_id)
+    if multi_image_item_id:
+        tester.test_delete_inventory_item(multi_image_item_id)
 
     # Print final results
     print("\n" + "=" * 50)
