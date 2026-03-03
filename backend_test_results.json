@@ -1,10 +1,10 @@
 {
   "summary": {
-    "total_tests": 19,
-    "passed_tests": 19,
+    "total_tests": 28,
+    "passed_tests": 28,
     "failed_tests": 0,
     "success_rate": 100.0,
-    "timestamp": "2026-02-28T18:11:47.601846"
+    "timestamp": "2026-03-03T15:59:24.213305"
   },
   "detailed_results": [
     {
@@ -23,7 +23,7 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc3MjM4ODcwNX0.lc34BNUwU"
+      "response_preview": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc3MjYzOTk1OX0.KGeaHHuUc"
     },
     {
       "test": "Admin Verify Token",
@@ -41,7 +41,7 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"message\":\"Database already seeded\",\"count\":37}"
+      "response_preview": "{\"message\":\"Database already seeded\",\"count\":38}"
     },
     {
       "test": "Get Settings",
@@ -86,12 +86,12 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"a6639cc5-a7c1-4284-b796-c4a5520193b7\",\"image_url\":\"https://images.unsplash.com/photo-15566567"
+      "response_preview": "{\"id\":\"44d93d93-556f-470d-8e15-7557e8b7f8a1\",\"image_url\":\"https://images.unsplash.com/photo-15566567"
     },
     {
       "test": "Update Banner",
       "method": "PUT",
-      "endpoint": "banners/a6639cc5-a7c1-4284-b796-c4a5520193b7",
+      "endpoint": "banners/44d93d93-556f-470d-8e15-7557e8b7f8a1",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
@@ -100,7 +100,7 @@
     {
       "test": "Delete Banner",
       "method": "DELETE",
-      "endpoint": "banners/a6639cc5-a7c1-4284-b796-c4a5520193b7",
+      "endpoint": "banners/44d93d93-556f-470d-8e15-7557e8b7f8a1",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
@@ -131,34 +131,106 @@
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"3423e287-4bc3-4db9-8dd5-e15ecd5111ef\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+      "response_preview": "{\"id\":\"b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
     },
     {
       "test": "Get Single Inventory Item",
       "method": "GET",
-      "endpoint": "inventory/3423e287-4bc3-4db9-8dd5-e15ecd5111ef",
+      "endpoint": "inventory/b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"3423e287-4bc3-4db9-8dd5-e15ecd5111ef\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+      "response_preview": "{\"id\":\"b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
     },
     {
       "test": "Update Inventory Item",
       "method": "PUT",
-      "endpoint": "inventory/3423e287-4bc3-4db9-8dd5-e15ecd5111ef",
+      "endpoint": "inventory/b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
-      "response_preview": "{\"id\":\"3423e287-4bc3-4db9-8dd5-e15ecd5111ef\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+      "response_preview": "{\"id\":\"b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
     },
     {
       "test": "Decrement Stock",
       "method": "POST",
-      "endpoint": "inventory/3423e287-4bc3-4db9-8dd5-e15ecd5111ef/decrement-stock",
+      "endpoint": "inventory/b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057/decrement-stock",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
       "response_preview": "{\"message\":\"Stock updated\",\"new_stock\":18}"
+    },
+    {
+      "test": "Create Multi-Image Product",
+      "method": "POST",
+      "endpoint": "inventory",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"c0fbd9cd-da73-4319-8cc7-edfa2f870e9c\",\"product_name\":\"Multi-Image Test Phone\",\"brand\":\"TestBr"
+    },
+    {
+      "test": "Change Password (Valid)",
+      "method": "POST",
+      "endpoint": "admin/change-password",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Password changed successfully\"}"
+    },
+    {
+      "test": "Login with New Password",
+      "method": "POST",
+      "endpoint": "admin/login",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc3MjYzOTk2Mn0.Hvs2AAIUj"
+    },
+    {
+      "test": "Reset Password to Original",
+      "method": "POST",
+      "endpoint": "admin/change-password",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Password changed successfully\"}"
+    },
+    {
+      "test": "Login with Original Password",
+      "method": "POST",
+      "endpoint": "admin/login",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc3MjYzOTk2M30.v1TymhC6s"
+    },
+    {
+      "test": "Change Password (Too Short)",
+      "method": "POST",
+      "endpoint": "admin/change-password",
+      "expected_status": 400,
+      "actual_status": 400,
+      "success": true,
+      "response_preview": "{\"detail\":\"New password must be at least 6 characters\"}"
+    },
+    {
+      "test": "Change Password (Wrong Old)",
+      "method": "POST",
+      "endpoint": "admin/change-password",
+      "expected_status": 401,
+      "actual_status": 401,
+      "success": true,
+      "response_preview": "{\"detail\":\"Invalid current password\"}"
+    },
+    {
+      "test": "Change Password (Missing Field)",
+      "method": "POST",
+      "endpoint": "admin/change-password",
+      "expected_status": 400,
+      "actual_status": 400,
+      "success": true,
+      "response_preview": "{\"detail\":\"Both old and new passwords are required\"}"
     },
     {
       "test": "Get Non-existent Item",
@@ -172,7 +244,16 @@
     {
       "test": "Delete Inventory Item",
       "method": "DELETE",
-      "endpoint": "inventory/3423e287-4bc3-4db9-8dd5-e15ecd5111ef",
+      "endpoint": "inventory/b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Item deleted successfully\"}"
+    },
+    {
+      "test": "Delete Inventory Item",
+      "method": "DELETE",
+      "endpoint": "inventory/c0fbd9cd-da73-4319-8cc7-edfa2f870e9c",
       "expected_status": 200,
       "actual_status": 200,
       "success": true,
