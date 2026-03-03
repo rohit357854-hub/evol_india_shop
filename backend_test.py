@@ -172,6 +172,128 @@ Test Bulk Phone 2,TestBrand,30000,Pre-owned,Mobile,https://images.unsplash.com/p
         # For this test, we'll simulate the CSV upload by checking if the endpoint exists
         # In a real scenario, we'd need to create a proper multipart/form-data request
         print("   Note: CSV upload test simulated (requires multipart/form-data)")
+
+    def test_multi_image_product(self):
+        """Test creating product with comma-separated images in main_image field"""
+        if not self.admin_token:
+            print("❌ Skipped - No admin token available")
+            return False, None
+            
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.admin_token}'
+        }
+        
+        # Create product with comma-separated URLs in main_image
+        test_product = {
+            "product_name": "Multi-Image Test Phone",
+            "brand": "TestBrand",
+            "price": 60000,
+            "condition": "New",
+            "category": "Mobile",
+            "main_image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80,https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&q=80,https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&q=80",
+            "images": [],
+            "color": "Multi Black",
+            "ram_rom": "12GB/256GB",
+            "stock_count": 5,
+            "specifications": "• Multi-image test\n• Comma-separated URLs\n• Slider functionality"
+        }
+        success, data = self.run_test("Create Multi-Image Product", "POST", "inventory", 200, test_product, headers)
+        if success and 'id' in data:
+            print(f"   Created multi-image product with ID: {data['id']}")
+            print(f"   Main image URLs: {data.get('main_image', 'N/A')}")
+            return True, data['id']
+        return False, None
+
+    def test_admin_change_password(self):
+        """Test admin password change functionality"""
+        if not self.admin_token:
+            print("❌ Skipped - No admin token available")
+            return False, {}
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.admin_token}'
+        }
+        
+        # Test password change with valid data
+        password_data = {
+            "old_password": "admin123",
+            "new_password": "newpass123"
+        }
+        success1, _ = self.run_test("Change Password (Valid)", "POST", "admin/change-password", 200, password_data, headers)
+        
+        if success1:
+            # Test login with new password
+            login_data = {
+                "username": "admin",
+                "password": "newpass123"
+            }
+            success2, data = self.run_test("Login with New Password", "POST", "admin/login", 200, login_data)
+            
+            if success2 and 'token' in data:
+                # Update token for future tests
+                self.admin_token = data['token']
+                print(f"   New admin token obtained: {self.admin_token[:20]}...")
+                
+                # Change password back to original
+                headers['Authorization'] = f'Bearer {self.admin_token}'
+                reset_data = {
+                    "old_password": "newpass123",
+                    "new_password": "admin123"
+                }
+                success3, _ = self.run_test("Reset Password to Original", "POST", "admin/change-password", 200, reset_data, headers)
+                
+                if success3:
+                    # Verify original password works
+                    original_login = {
+                        "username": "admin",
+                        "password": "admin123"
+                    }
+                    success4, final_data = self.run_test("Login with Original Password", "POST", "admin/login", 200, original_login)
+                    if success4 and 'token' in final_data:
+                        self.admin_token = final_data['token']
+                        return True
+                
+                return success1 and success2 and success3
+            
+            return success1 and success2
+        
+        return success1
+
+    def test_password_validation(self):
+        """Test password change validation"""
+        if not self.admin_token:
+            print("❌ Skipped - No admin token available")
+            return False, {}
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.admin_token}'
+        }
+        
+        # Test with short password (should fail)
+        short_password_data = {
+            "old_password": "admin123",
+            "new_password": "123"
+        }
+        success1, _ = self.run_test("Change Password (Too Short)", "POST", "admin/change-password", 400, short_password_data, headers)
+        
+        # Test with wrong old password (should fail)
+        wrong_old_data = {
+            "old_password": "wrongpass",
+            "new_password": "validpass123"
+        }
+        success2, _ = self.run_test("Change Password (Wrong Old)", "POST", "admin/change-password", 401, wrong_old_data, headers)
+        
+        # Test with missing fields (should fail)
+        missing_data = {
+            "old_password": "admin123"
+            # missing new_password
+        }
+        success3, _ = self.run_test("Change Password (Missing Field)", "POST", "admin/change-password", 400, missing_data, headers)
+        
+        return success1 and success2 and success3
     def test_get_nonexistent_item(self):
         """Test getting a non-existent item (should return 404)"""
         return self.run_test("Get Non-existent Item", "GET", "inventory/nonexistent-id", 404)
