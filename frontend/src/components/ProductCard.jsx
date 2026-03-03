@@ -30,7 +30,7 @@ export default function ProductCard({ product }) {
       {/* Image Container */}
       <div className="aspect-[4/3] overflow-hidden relative bg-zinc-900">
         <img
-          src={product.main_image}
+          src={getFirstImage()}
           alt={product.product_name}
           className="product-image w-full h-full object-cover"
           onError={(e) => {
