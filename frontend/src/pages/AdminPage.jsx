@@ -271,6 +271,39 @@ export default function AdminPage() {
     }
   };
 
+  // Password change function
+  const handleChangePassword = async () => {
+    if (!passwordData.old_password || !passwordData.new_password || !passwordData.confirm_password) {
+      toast.error("Please fill all password fields");
+      return;
+    }
+    
+    if (passwordData.new_password !== passwordData.confirm_password) {
+      toast.error("New passwords do not match");
+      return;
+    }
+    
+    if (passwordData.new_password.length < 6) {
+      toast.error("New password must be at least 6 characters");
+      return;
+    }
+    
+    setChangingPassword(true);
+    try {
+      await axios.post(`${API}/admin/change-password`, {
+        old_password: passwordData.old_password,
+        new_password: passwordData.new_password
+      }, getAuthHeaders());
+      
+      toast.success("Password changed successfully!");
+      setPasswordData({ old_password: "", new_password: "", confirm_password: "" });
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Failed to change password");
+    } finally {
+      setChangingPassword(false);
+    }
+  };
+
   // Banner functions
   const openBannerDialog = (banner = null) => {
     setEditingBanner(banner);
