@@ -11,6 +11,15 @@ export default function ProductCard({ product }) {
   };
 
   const isInStock = (product.stock_count || 0) > 0;
+  
+  // Get first image from comma-separated main_image
+  const getFirstImage = () => {
+    if (product.main_image) {
+      const firstImage = product.main_image.split(',')[0]?.trim();
+      return firstImage || "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80";
+    }
+    return "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&q=80";
+  };
 
   return (
     <Link
