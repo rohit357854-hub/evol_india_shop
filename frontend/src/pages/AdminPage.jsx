@@ -731,6 +731,57 @@ export default function AdminPage() {
                 </Button>
               </div>
             )}
+
+            {/* Password Change Section */}
+            <div className="glass-card rounded-2xl p-6 space-y-6">
+              <h2 className="text-xl font-semibold text-white font-['Outfit']">Change Password</h2>
+              <p className="text-zinc-400 text-sm">Update your admin login password</p>
+              
+              <div className="space-y-4 max-w-md">
+                <div className="space-y-2">
+                  <Label className="text-zinc-400">Current Password</Label>
+                  <Input
+                    type="password"
+                    placeholder="Enter current password"
+                    value={passwordData.old_password}
+                    onChange={(e) => setPasswordData({...passwordData, old_password: e.target.value})}
+                    className="bg-zinc-900/50 border-white/10 text-white"
+                    data-testid="current-password-input"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-zinc-400">New Password</Label>
+                  <Input
+                    type="password"
+                    placeholder="Enter new password (min 6 characters)"
+                    value={passwordData.new_password}
+                    onChange={(e) => setPasswordData({...passwordData, new_password: e.target.value})}
+                    className="bg-zinc-900/50 border-white/10 text-white"
+                    data-testid="new-password-input"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-zinc-400">Confirm New Password</Label>
+                  <Input
+                    type="password"
+                    placeholder="Confirm new password"
+                    value={passwordData.confirm_password}
+                    onChange={(e) => setPasswordData({...passwordData, confirm_password: e.target.value})}
+                    className="bg-zinc-900/50 border-white/10 text-white"
+                    data-testid="confirm-password-input"
+                  />
+                </div>
+                <Button 
+                  onClick={handleChangePassword} 
+                  disabled={changingPassword}
+                  className="bg-white text-black hover:bg-zinc-200 rounded-full"
+                  data-testid="change-password-btn"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  {changingPassword ? "Changing..." : "Change Password"}
+                </Button>
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
       </main>
