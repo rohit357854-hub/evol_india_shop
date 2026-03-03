@@ -190,11 +190,19 @@ async def verify_admin(username: str = Depends(verify_token)):
 
 @api_router.post("/admin/change-password")
 async def change_admin_password(
-    old_password: str,
-    new_password: str,
+    data: dict,
     username: str = Depends(verify_token)
 ):
     """Change admin password"""
+    old_password = data.get("old_password", "")
+    new_password = data.get("new_password", "")
+    
+    if not old_password or not new_password:
+        raise HTTPException(status_code=400, detail="Both old and new passwords are required")
+    
+    if len(new_password) < 6:
+        raise HTTPException(status_code=400, detail="New password must be at least 6 characters")
+    
     admin = await db.admins.find_one({"username": username}, {"_id": 0})
     if not admin or not verify_password(old_password, admin["password_hash"]):
         raise HTTPException(status_code=401, detail="Invalid current password")
