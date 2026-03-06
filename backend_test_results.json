@@ -1,0 +1,263 @@
+{
+  "summary": {
+    "total_tests": 28,
+    "passed_tests": 28,
+    "failed_tests": 0,
+    "success_rate": 100.0,
+    "timestamp": "2026-03-03T15:59:24.213305"
+  },
+  "detailed_results": [
+    {
+      "test": "Root API",
+      "method": "GET",
+      "endpoint": "",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Evol India Shop API\"}"
+    },
+    {
+      "test": "Admin Login",
+      "method": "POST",
+      "endpoint": "admin/login",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc3MjYzOTk1OX0.KGeaHHuUc"
+    },
+    {
+      "test": "Admin Verify Token",
+      "method": "GET",
+      "endpoint": "admin/verify",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"valid\":true,\"username\":\"admin\"}"
+    },
+    {
+      "test": "Seed Database",
+      "method": "POST",
+      "endpoint": "seed",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Database already seeded\",\"count\":38}"
+    },
+    {
+      "test": "Get Settings",
+      "method": "GET",
+      "endpoint": "settings",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"shop_settings\",\"shop_name\":\"Evol India Shop Test\",\"address\":\"Delhi Rohtak Road, Metro Pillar "
+    },
+    {
+      "test": "Update Settings",
+      "method": "PUT",
+      "endpoint": "settings",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Settings updated successfully\"}"
+    },
+    {
+      "test": "Get Public Banners",
+      "method": "GET",
+      "endpoint": "banners",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "[{\"id\":\"6b8620e7-a9b1-463a-b45f-f0d2f488bbb1\",\"image_url\":\"https://images.unsplash.com/photo-1556656"
+    },
+    {
+      "test": "Get All Banners (Admin)",
+      "method": "GET",
+      "endpoint": "banners/all",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "[{\"id\":\"6b8620e7-a9b1-463a-b45f-f0d2f488bbb1\",\"image_url\":\"https://images.unsplash.com/photo-1556656"
+    },
+    {
+      "test": "Create Banner",
+      "method": "POST",
+      "endpoint": "banners",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"44d93d93-556f-470d-8e15-7557e8b7f8a1\",\"image_url\":\"https://images.unsplash.com/photo-15566567"
+    },
+    {
+      "test": "Update Banner",
+      "method": "PUT",
+      "endpoint": "banners/44d93d93-556f-470d-8e15-7557e8b7f8a1",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Banner updated successfully\"}"
+    },
+    {
+      "test": "Delete Banner",
+      "method": "DELETE",
+      "endpoint": "banners/44d93d93-556f-470d-8e15-7557e8b7f8a1",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Banner deleted successfully\"}"
+    },
+    {
+      "test": "Get All Inventory",
+      "method": "GET",
+      "endpoint": "inventory",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "[{\"id\":\"7227f202-9650-4a88-abb8-732ee82da65e\",\"product_name\":\"iPhone 15 Pro Max\",\"brand\":\"Apple\",\"pr"
+    },
+    {
+      "test": "Get Brands",
+      "method": "GET",
+      "endpoint": "brands",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "[\"Anker\",\"Apple\",\"Google\",\"OnePlus\",\"Oppo\",\"Samsung\",\"TestBrand\",\"Vivo\",\"Xiaomi\"]"
+    },
+    {
+      "test": "Create Inventory Item",
+      "method": "POST",
+      "endpoint": "inventory",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+    },
+    {
+      "test": "Get Single Inventory Item",
+      "method": "GET",
+      "endpoint": "inventory/b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+    },
+    {
+      "test": "Update Inventory Item",
+      "method": "PUT",
+      "endpoint": "inventory/b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057\",\"product_name\":\"Test Phone XYZ\",\"brand\":\"TestBrand\",\"pr"
+    },
+    {
+      "test": "Decrement Stock",
+      "method": "POST",
+      "endpoint": "inventory/b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057/decrement-stock",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Stock updated\",\"new_stock\":18}"
+    },
+    {
+      "test": "Create Multi-Image Product",
+      "method": "POST",
+      "endpoint": "inventory",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"id\":\"c0fbd9cd-da73-4319-8cc7-edfa2f870e9c\",\"product_name\":\"Multi-Image Test Phone\",\"brand\":\"TestBr"
+    },
+    {
+      "test": "Change Password (Valid)",
+      "method": "POST",
+      "endpoint": "admin/change-password",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Password changed successfully\"}"
+    },
+    {
+      "test": "Login with New Password",
+      "method": "POST",
+      "endpoint": "admin/login",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc3MjYzOTk2Mn0.Hvs2AAIUj"
+    },
+    {
+      "test": "Reset Password to Original",
+      "method": "POST",
+      "endpoint": "admin/change-password",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Password changed successfully\"}"
+    },
+    {
+      "test": "Login with Original Password",
+      "method": "POST",
+      "endpoint": "admin/login",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc3MjYzOTk2M30.v1TymhC6s"
+    },
+    {
+      "test": "Change Password (Too Short)",
+      "method": "POST",
+      "endpoint": "admin/change-password",
+      "expected_status": 400,
+      "actual_status": 400,
+      "success": true,
+      "response_preview": "{\"detail\":\"New password must be at least 6 characters\"}"
+    },
+    {
+      "test": "Change Password (Wrong Old)",
+      "method": "POST",
+      "endpoint": "admin/change-password",
+      "expected_status": 401,
+      "actual_status": 401,
+      "success": true,
+      "response_preview": "{\"detail\":\"Invalid current password\"}"
+    },
+    {
+      "test": "Change Password (Missing Field)",
+      "method": "POST",
+      "endpoint": "admin/change-password",
+      "expected_status": 400,
+      "actual_status": 400,
+      "success": true,
+      "response_preview": "{\"detail\":\"Both old and new passwords are required\"}"
+    },
+    {
+      "test": "Get Non-existent Item",
+      "method": "GET",
+      "endpoint": "inventory/nonexistent-id",
+      "expected_status": 404,
+      "actual_status": 404,
+      "success": true,
+      "response_preview": "{\"detail\":\"Item not found\"}"
+    },
+    {
+      "test": "Delete Inventory Item",
+      "method": "DELETE",
+      "endpoint": "inventory/b10e60ff-bcb5-4ceb-a295-ef1e8b2fc057",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Item deleted successfully\"}"
+    },
+    {
+      "test": "Delete Inventory Item",
+      "method": "DELETE",
+      "endpoint": "inventory/c0fbd9cd-da73-4319-8cc7-edfa2f870e9c",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response_preview": "{\"message\":\"Item deleted successfully\"}"
+    }
+  ]
+}
