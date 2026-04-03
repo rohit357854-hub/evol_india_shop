@@ -450,10 +450,16 @@ async def get_brands():
 
 @api_router.post("/seed")
 async def seed_database():
+    
     """Seed the database with sample products"""
     count = await db.inventory.count_documents({})
     if count > 0:
         return {"message": "Database already seeded", "count": count}
+
+    @api_router.get("/seed")
+async def get_seed_data():
+    items = await db.inventory.find({}, {"_id": 0}).to_list(1000)
+    return items
     
     sample_products = [
         # Mobile Phones - New
