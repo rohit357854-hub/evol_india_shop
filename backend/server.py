@@ -455,11 +455,6 @@ async def seed_database():
     count = await db.inventory.count_documents({})
     if count > 0:
         return {"message": "Database already seeded", "count": count}
-
-    @api_router.get("/seed")
-async def get_seed_data():
-    items = await db.inventory.find({}, {"_id": 0}).to_list(1000)
-    return items
     
     sample_products = [
         # Mobile Phones - New
@@ -795,6 +790,11 @@ async def get_seed_data():
         await db.banners.insert_many(default_banners)
     
     return {"message": "Database seeded successfully", "count": len(sample_products)}
+
+@api_router.get("/seed")
+async def get_seed_data():
+    items = await db.inventory.find({}, {"_id": 0}).to_list(1000)
+    return items
 
 # Include the router in the main app
 app.include_router(api_router)
